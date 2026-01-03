@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard"/>
+
+    <item android:id="@+id/nav_contacts"
+        android:title="Emergency Contacts"
+        android:icon="@drawable/ic_contacts"/>
+
+    <item android:id="@+id/nav_trips"
+        android:title="My Trips"
+        android:icon="@drawable/ic_calendar"/>
+
+    <item android:id="@+id/nav_vehicle"
+        android:title="Vehicle Info"
+        android:icon="@drawable/ic_car"/>
+
+    <item android:id="@+id/nav_help"
+        android:title="Help and Support"
+        android:icon="@drawable/ic_settings"/>
+
+</menu>

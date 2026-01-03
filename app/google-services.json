@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "523092574858",
+    "project_id": "android-hotspot",
+    "storage_bucket": "android-hotspot.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523092574858:android:21c5a2e60612223a4f6373",
+        "android_client_info": {
+          "package_name": "com.example.accident_hotspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523092574858-viksolceib4nt71b61akuvs041cea8bg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.accident_hotspot",
+            "certificate_hash": "e5217bc829526064937cf9920ba19e09d07646e7"
+          }
+        },
+        {
+          "client_id": "523092574858-blos74l3dnf7lqhha6e3f3dndh52r8gg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv9aGDUFv0LfCgJoLrwvMw3MGwGA_bVtk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523092574858-blos74l3dnf7lqhha6e3f3dndh52r8gg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
