@@ -26,7 +26,7 @@ public class EditProfileActivity extends AppCompatActivity {
     TextView txtName;
     View btnSave;
 
-    SharedPreferences preferences;
+    SharedPreferences prefs;
     ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
@@ -34,7 +34,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        preferences = getSharedPreferences("UserProfile", MODE_PRIVATE);
+        prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
 
         edtName = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
@@ -42,7 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
         edtDob = findViewById(R.id.edtDob);
         edtPassword = findViewById(R.id.edtPassword);
         edtAddress = findViewById(R.id.edtAddress);
-        txtName = findViewById(R.id.txtName); // TextView in profile header
+        txtName = findViewById(R.id.txtName);
         profileImage = findViewById(R.id.profileImage);
         editCamera = findViewById(R.id.editCamera);
         btnSave = findViewById(R.id.btnSave);
@@ -58,21 +58,19 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        edtName.setText(preferences.getString("name", ""));
-        edtEmail.setText(preferences.getString("email", ""));
-        edtPhone.setText(preferences.getString("phone", ""));
-        edtDob.setText(preferences.getString("dob", ""));
-        edtPassword.setText(preferences.getString("password", ""));
-        edtAddress.setText(preferences.getString("address", ""));
+        edtName.setText(prefs.getString("name", ""));
+        edtEmail.setText(prefs.getString("email", ""));
+        edtPhone.setText(prefs.getString("phone", ""));
+        edtDob.setText(prefs.getString("dob", ""));
+        edtPassword.setText(prefs.getString("password", ""));
+        edtAddress.setText(prefs.getString("address", ""));
 
-        String imageUri = preferences.getString("profileImage", "");
+        String imageUri = prefs.getString("profileImage", "");
         if (!imageUri.isEmpty()) {
-            try {
-                profileImage.setImageURI(Uri.parse(imageUri));
-            } catch (Exception ignored) {}
+            profileImage.setImageURI(Uri.parse(imageUri));
         }
 
-        txtName.setText(preferences.getString("name", ""));
+        txtName.setText(prefs.getString("name", ""));
     }
 
     private void saveProfile() {
@@ -85,7 +83,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putString("name", edtName.getText().toString());
         editor.putString("email", edtEmail.getText().toString());
         editor.putString("phone", edtPhone.getText().toString());
@@ -97,7 +95,7 @@ public class EditProfileActivity extends AppCompatActivity {
         txtName.setText(edtName.getText().toString());
 
         Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
-        finish(); // Return to ProfileActivity, which will refresh
+        finish();
     }
 
     private void setupImagePicker() {
@@ -107,18 +105,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri selectedImage = result.getData().getData();
                         try {
-                            getContentResolver().takePersistableUriPermission(
-                                    selectedImage,
-                                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            );
-
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(
                                     getContentResolver(), selectedImage
                             );
                             profileImage.setImageBitmap(bitmap);
 
-                            preferences.edit().putString("profileImage",
-                                    selectedImage.toString()).apply();
+                            prefs.edit().putString("profileImage", selectedImage.toString()).apply();
 
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
     LinearLayout layoutAddAccount, layoutEmergencyContacts, layoutReports, layoutSettings;
     Button btnLogout;
 
-    SharedPreferences preferences;
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     @Override
@@ -30,10 +29,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(ProfileActivity.this);
-        editor = preferences.edit();
+        prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        editor = prefs.edit();
 
-        // FIND VIEWS
         toolbar = findViewById(R.id.toolbar);
         profileImage = findViewById(R.id.profileImage);
         txtName = findViewById(R.id.txtName);
@@ -48,18 +46,13 @@ public class ProfileActivity extends AppCompatActivity {
         layoutSettings = findViewById(R.id.layoutSettings);
         btnLogout = findViewById(R.id.btnLogout);
 
-        // TOOLBAR BACK
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // EDIT PROFILE CLICK
         tveditprofile.setOnClickListener(v ->
                 startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class)));
 
-        // ✔ LOGOUT FIXED COMPLETELY
         btnLogout.setOnClickListener(v -> {
-
-            // Clear login flag
             editor.putBoolean("islogin", false);
             editor.apply();
 
@@ -68,7 +61,6 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-
             finish();
         });
 
@@ -76,16 +68,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
-        txtName.setText(preferences.getString("name", "Your Name"));
-        txtEmail.setText("Email: " + preferences.getString("email", "example@email.com"));
-        txtPhone.setText("Phone: " + preferences.getString("phone", "0000000000"));
+        txtName.setText(prefs.getString("name", "Your Name"));
+        txtEmail.setText("Email: " + prefs.getString("email", "your@email.com"));
+        txtPhone.setText("Phone: " + prefs.getString("phone", "0000000000"));
         txtMemberSince.setText("Member Since: Oct 2024");
 
-        String imageUri = preferences.getString("profileImage", "");
+        String imageUri = prefs.getString("profileImage", "");
         if (!imageUri.isEmpty()) {
             try {
                 profileImage.setImageURI(Uri.parse(imageUri));
             } catch (Exception ignored) {}
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserProfile();
     }
 }

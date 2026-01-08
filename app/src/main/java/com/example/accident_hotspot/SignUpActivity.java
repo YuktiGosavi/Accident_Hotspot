@@ -18,7 +18,7 @@ public class SignUpActivity extends AppCompatActivity {
     Button btnSignUp;
     TextView tvLogin;
 
-    SharedPreferences sharedPreferences;
+    SharedPreferences prefs;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,9 +26,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
 
-        edtName = findViewById(R.id.textinput_fullname);  // we will assign ids below
+        edtName = findViewById(R.id.textinput_fullname);
         edtEmail = findViewById(R.id.textinput_email);
         edtPassword = findViewById(R.id.textinput_passwords);
         edtConfirmPassword = findViewById(R.id.textinput_confirm_password);
@@ -53,26 +53,24 @@ public class SignUpActivity extends AppCompatActivity {
             edtName.setError("Enter full name");
             return;
         }
-
         if (email.isEmpty()) {
             edtEmail.setError("Enter email");
             return;
         }
-
         if (pass.isEmpty()) {
             edtPassword.setError("Enter password");
             return;
         }
-
         if (!pass.equals(confirmPass)) {
             edtConfirmPassword.setError("Passwords do not match");
             return;
         }
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("FULLNAME", name);
-        editor.putString("EMAIL", email);
-        editor.putString("PASSWORD", pass);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("name", name);
+        editor.putString("email", email);
+        editor.putString("password", pass);
+        editor.putBoolean("islogin", true);
         editor.apply();
 
         Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show();
