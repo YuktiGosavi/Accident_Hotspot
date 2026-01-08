@@ -4,6 +4,9 @@
     <!-- <tagname attributename = "value"/> -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.CALL_PHONE"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Accident_Hotspot"
         tools:targetApi="31">
+        <activity
+            android:name=".EmergenceActivity"
+            android:exported="false" />
+
         <activity
             android:name=".NearbyActivity"
             android:exported="false" />

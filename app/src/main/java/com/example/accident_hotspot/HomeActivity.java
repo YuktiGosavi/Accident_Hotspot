@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.accident_hotspot.fragment.CallFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -149,6 +150,8 @@ public class HomeActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.nav_emergency) {
+            startActivity(new Intent(HomeActivity.this, EmergenceActivity.class));
+
             Toast.makeText(this, "Emergency", Toast.LENGTH_SHORT).show();
             return true;
 

@@ -1,4 +1,4 @@
-package com.example.accident_hotspot.fragment;
+package com.example.accident_hotspot;
 
 import android.Manifest;
 import android.content.Intent;
@@ -6,21 +6,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
-import com.example.accident_hotspot.R;
-
-public class CallFragment extends Fragment {
+public class EmergenceActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextView txtCallTimer;
@@ -42,27 +36,22 @@ public class CallFragment extends Fragment {
     };
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_call); // reuse same UI
 
-        View view = inflater.inflate(R.layout.fragment_call, container, false);
+        // Bind views (Activity way)
+        toolbar = findViewById(R.id.toolbar);
+        txtCallTimer = findViewById(R.id.txtCallTimer);
+        icMicOff = findViewById(R.id.ic_mic_off_btn);
+        icCallEnd = findViewById(R.id.ic_call_end_btn);
+        icAddContact = findViewById(R.id.ic_add_contacts_btn);
 
-        // Bind Views (NO ERROR)
-        toolbar = view.findViewById(R.id.toolbar);
-        txtCallTimer = view.findViewById(R.id.txtCallTimer);
-        icMicOff = view.findViewById(R.id.ic_mic_off_btn);
-        icCallEnd = view.findViewById(R.id.ic_call_end_btn);
-        icAddContact = view.findViewById(R.id.ic_add_contacts_btn);
-
-        toolbar.setNavigationOnClickListener(v ->
-                requireActivity().onBackPressed()
-        );
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         startTimer();
         makeEmergencyCall();
         setupClicks();
-
-        return view;
     }
 
     private void startTimer() {
@@ -74,11 +63,11 @@ public class CallFragment extends Fragment {
         intent.setData(Uri.parse("tel:112"));
 
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
+                this,
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(
-                    requireActivity(),
+                    this,
                     new String[]{Manifest.permission.CALL_PHONE},
                     101
             );
@@ -91,28 +80,29 @@ public class CallFragment extends Fragment {
 
         icMicOff.setOnClickListener(v -> {
             isMuted = !isMuted;
-            Toast.makeText(requireContext(),
+            Toast.makeText(
+                    this,
                     isMuted ? "Call Muted" : "Call Unmuted",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT
+            ).show();
         });
 
         icCallEnd.setOnClickListener(v -> {
             handler.removeCallbacks(timerRunnable);
-            Toast.makeText(requireContext(),
-                    "Call Ended", Toast.LENGTH_SHORT).show();
-            requireActivity().onBackPressed();
+            Toast.makeText(this, "Call Ended", Toast.LENGTH_SHORT).show();
+            finish(); // close activity
         });
 
         icAddContact.setOnClickListener(v ->
-                Toast.makeText(requireContext(),
+                Toast.makeText(this,
                         "Add Contact Clicked",
                         Toast.LENGTH_SHORT).show()
         );
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    protected void onDestroy() {
+        super.onDestroy();
         handler.removeCallbacks(timerRunnable);
     }
 }
