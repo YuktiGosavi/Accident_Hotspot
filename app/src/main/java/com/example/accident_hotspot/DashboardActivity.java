@@ -1,24 +1,45 @@
 package com.example.accident_hotspot;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class DashboardActivity extends AppCompatActivity {
 
+    TextView viewDetails;
+    LinearLayout heavyTrafficItem, nearbyItem;
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        viewDetails = findViewById(R.id.btnViewDetails);
+        heavyTrafficItem = findViewById(R.id.ivarrow1);
+        nearbyItem = findViewById(R.id.ivarrow2);
+
+        // View Details click
+        viewDetails.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, ViewDetailsActivity.class);
+            startActivity(intent);
+        });
+
+        // Heavy Traffic click
+        heavyTrafficItem.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, HeavyTrafficActivity.class);
+            startActivity(intent);
+        });
+
+        // Nearby Pothole click
+        nearbyItem.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, NearbyActivity.class);
+            startActivity(intent);
         });
     }
 }
