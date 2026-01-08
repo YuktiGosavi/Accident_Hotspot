@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin, btnGoogle;
     TextView tvSignUp, tvForgot;
 
-    SharedPreferences preferences;
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     GoogleSignInOptions googleSignInOptions;
@@ -37,18 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // SharedPreference Initialization
-        preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        editor = preferences.edit();
+        prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        editor = prefs.edit();
 
-        // ✔ If already logged in → Go to Home
-        if (preferences.getBoolean("islogin", false)) {
+        // Already logged in?
+        if (prefs.getBoolean("islogin", false)) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
             return;
         }
 
-        // Initialize UI
         etEmail = findViewById(R.id.textinput_edittext);
         etPassword = findViewById(R.id.textinput_password);
         btnLogin = findViewById(R.id.btnLogin);
@@ -56,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp = findViewById(R.id.textSignUp);
         tvForgot = findViewById(R.id.textForgot);
 
-        // EMAIL LOGIN -----------------------------
         btnLogin.setOnClickListener(view -> {
             String email = etEmail.getText().toString().trim();
             String pass = etPassword.getText().toString().trim();
@@ -65,23 +61,28 @@ public class LoginActivity extends AppCompatActivity {
                 etEmail.setError("Email required!");
                 return;
             }
-
             if (TextUtils.isEmpty(pass)) {
                 etPassword.setError("Password required!");
                 return;
             }
 
-            Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+            String savedEmail = prefs.getString("email", "");
+            String savedPass = prefs.getString("password", "");
 
-            // ✔ Save login flag
-            editor.putBoolean("islogin", true);
-            editor.apply();
+            if (email.equals(savedEmail) && pass.equals(savedPass)) {
 
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-            finish();
+                editor.putBoolean("islogin", true);
+                editor.apply();
+
+                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                finish();
+            } else {
+                Toast.makeText(this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        // GOOGLE SIGN IN ------------------------------
         googleSignInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestEmail()
@@ -89,24 +90,20 @@ public class LoginActivity extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        btnGoogle.setOnClickListener(v -> signIn());
+        btnGoogle.setOnClickListener(v -> signInWithGoogle());
 
-        // FORGOT PASSWORD
         tvForgot.setOnClickListener(v ->
                 Toast.makeText(this, "Forgot Password Clicked!", Toast.LENGTH_SHORT).show());
 
-        // SIGNUP
         tvSignUp.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class)));
     }
 
-    // GOOGLE SIGN-IN FUNCTION
-    private void signIn() {
+    private void signInWithGoogle() {
         Intent intent = googleSignInClient.getSignInIntent();
         startActivityForResult(intent, 100);
     }
 
-    // GOOGLE LOGIN RESULT
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -115,10 +112,12 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
             if (account != null) {
-                Toast.makeText(this, "Google Login Successful!", Toast.LENGTH_SHORT).show();
-
+                editor.putString("name", account.getDisplayName());
+                editor.putString("email", account.getEmail());
                 editor.putBoolean("islogin", true);
                 editor.apply();
+
+                Toast.makeText(this, "Google Login Successful!", Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();

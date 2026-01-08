@@ -103,14 +103,33 @@ public class HomeActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationView);
     }
 
+    // -------------------------------------------------------------------------
+    // UPDATED METHOD — Your SharedPreferences code added
+    // -------------------------------------------------------------------------
     private void setupDrawerHeader() {
         View headerView = navigationView.getHeaderView(0);
+
+        // Find header views
+        TextView txtName = headerView.findViewById(R.id.txtName);
+        TextView txtEmail = headerView.findViewById(R.id.txtEmail);
         ImageView profileImage = headerView.findViewById(R.id.profileImage);
 
-        profileImage.setOnClickListener(v -> {
-            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-        });
+        // Load saved data
+        SharedPreferences prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+
+        txtName.setText(prefs.getString("name", "Your Name"));
+        txtEmail.setText(prefs.getString("email", "your@gmail.com"));
+
+        String imgUri = prefs.getString("profileImage", "");
+        if (!imgUri.isEmpty()) profileImage.setImageURI(android.net.Uri.parse(imgUri));
+
+        // Profile image click → open ProfileActivity
+        profileImage.setOnClickListener(v ->
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class))
+        );
     }
+
+    // -------------------------------------------------------------------------
 
     private void setupMapClick() {
         mapImage.setOnClickListener(v ->

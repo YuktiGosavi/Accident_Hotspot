@@ -29,7 +29,7 @@
             android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yukti Gosavi"
+            android:text="Your name"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"/>
@@ -38,7 +38,7 @@
             android:id="@+id/txtEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="yuktigosavi@email.com"
+            android:text=" your email"
             android:textColor="#373131"
             android:textSize="14sp"/>
     </LinearLayout>
