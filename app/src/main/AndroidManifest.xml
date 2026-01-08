@@ -16,6 +16,15 @@
         android:theme="@style/Theme.Accident_Hotspot"
         tools:targetApi="31">
         <activity
+            android:name=".NearbyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HeavyTrafficActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DashboardActivity"
             android:exported="false" />
         <activity
