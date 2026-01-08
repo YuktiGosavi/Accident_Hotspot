@@ -6,12 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.Intent;
+import android.widget.Toast;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -22,13 +23,15 @@ public class ProfileActivity extends AppCompatActivity {
     Button btnLogout;
 
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        preferences = getSharedPreferences("UserProfile", MODE_PRIVATE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(ProfileActivity.this);
+        editor = preferences.edit();
 
         // FIND VIEWS
         toolbar = findViewById(R.id.toolbar);
@@ -50,41 +53,28 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
         // EDIT PROFILE CLICK
-        tveditprofile.setOnClickListener(v -> {
-            startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
-        });
+        tveditprofile.setOnClickListener(v ->
+                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class)));
 
-        // LOGOUT
+        // ✔ LOGOUT FIXED COMPLETELY
         btnLogout.setOnClickListener(v -> {
-            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
-            preferences.edit().clear().apply();
-            //startActivity(new Intent(ProfileActivity.this, LoginActivity.class)
-            //        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            //finish();
+
+            // Clear login flag
+            editor.putBoolean("islogin", false);
+            editor.apply();
+
+            Toast.makeText(ProfileActivity.this, "Logged Out!", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+
             finish();
         });
 
-        // OPTIONAL OTHER LAYOUT CLICKS
-        layoutAddAccount.setOnClickListener(v ->
-                Toast.makeText(this, "Add Account clicked", Toast.LENGTH_SHORT).show());
-        layoutEmergencyContacts.setOnClickListener(v ->
-                Toast.makeText(this, "Emergency Contacts clicked", Toast.LENGTH_SHORT).show());
-        layoutReports.setOnClickListener(v ->
-                Toast.makeText(this, "Recent Reports clicked", Toast.LENGTH_SHORT).show());
-        layoutSettings.setOnClickListener(v ->
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         loadUserProfile();
     }
 
-    // LOAD PROFILE DATA FROM SharedPreferences
     private void loadUserProfile() {
         txtName.setText(preferences.getString("name", "Your Name"));
         txtEmail.setText("Email: " + preferences.getString("email", "example@email.com"));
@@ -95,9 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (!imageUri.isEmpty()) {
             try {
                 profileImage.setImageURI(Uri.parse(imageUri));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception ignored) {}
         }
     }
 }
