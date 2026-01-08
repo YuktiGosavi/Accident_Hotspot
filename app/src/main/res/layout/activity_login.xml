@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#F6E3C7">
 
-    <!-- Top Title Status Bar (Black) -->
     <View
         android:id="@+id/statusBar"
         android:layout_width="match_parent"
