@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class EmergenceActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView txtCallTimer;
     private ImageView icMicOff, icCallEnd, icAddContact;
+    private LinearLayout addcontact;
 
     private Handler handler = new Handler();
     private int seconds = 0;
@@ -46,6 +48,8 @@ public class EmergenceActivity extends AppCompatActivity {
         icMicOff = findViewById(R.id.ic_mic_off_btn);
         icCallEnd = findViewById(R.id.ic_call_end_btn);
         icAddContact = findViewById(R.id.ic_add_contacts_btn);
+
+
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -94,9 +98,9 @@ public class EmergenceActivity extends AppCompatActivity {
         });
 
         icAddContact.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Add Contact Clicked",
-                        Toast.LENGTH_SHORT).show()
+
+                startActivity(new Intent(EmergenceActivity.this, EmergencyContactActivity.class))
+
         );
     }
 

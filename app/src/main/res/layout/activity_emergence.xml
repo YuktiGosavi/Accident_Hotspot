@@ -175,6 +175,7 @@
         <!-- Add Contact -->
         <LinearLayout
             android:layout_width="0dp"
+            android:id="@+id/AddContact"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
