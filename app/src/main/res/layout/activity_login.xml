@@ -92,7 +92,7 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@drawable/btn_orange"
+                android:background="@drawable/logout_btn_bg"
                 android:text="LOGIN"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
