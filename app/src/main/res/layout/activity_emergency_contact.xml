@@ -17,24 +17,12 @@
         app:titleTextColor="#ffffff"
         app:navigationIcon="@drawable/ic_back"/>
 
-    <!-- Info Card -->
-
-
-    <!-- Title -->
-    <TextView
-        android:text="Your Contacts"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="6sp"
         android:layout_weight="1"
         android:padding="8dp"/>
 
