@@ -1,5 +1,8 @@
 package com.example.accident_hotspot;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class EmergencyContactAdapter extends RecyclerView.Adapter<EmergencyContactAdapter.ViewHolder> {
+public class EmergencyContactAdapter
+        extends RecyclerView.Adapter<EmergencyContactAdapter.ViewHolder> {
 
     Context context;
     List<EmergencyContact> list;
@@ -26,7 +30,7 @@ public class EmergencyContactAdapter extends RecyclerView.Adapter<EmergencyConta
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.emergency_contact, parent, false);
+                .inflate(R.layout.row_emergency_contact, parent, false);
         return new ViewHolder(view);
     }
 
@@ -39,14 +43,36 @@ public class EmergencyContactAdapter extends RecyclerView.Adapter<EmergencyConta
         holder.txtRelation.setText(contact.getRelation());
         holder.txtPhone.setText(contact.getPhone());
 
-        holder.txtAvatar.setText(
-                contact.getName().substring(0,1).toUpperCase()
-        );
+        // 📞 CALL
+        holder.imgCall.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_DIAL);
+            i.setData(Uri.parse("tel:" + contact.getPhone()));
+            context.startActivity(i);
+        });
 
-        holder.btnEdit.setOnClickListener(v ->
-                Toast.makeText(context, "Edit " + contact.getName(),
-                        Toast.LENGTH_SHORT).show()
-        );
+        // 📩 SMS
+        holder.imgSms.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("sms:" + contact.getPhone()));
+            context.startActivity(i);
+        });
+
+        // ✏️ EDIT
+        holder.imgEdit.setOnClickListener(v -> {
+            Intent i = new Intent(context, AddEmergencyContactActivity.class);
+            i.putExtra("name", contact.getName());
+            i.putExtra("relation", contact.getRelation());
+            i.putExtra("phone", contact.getPhone());
+            context.startActivity(i);
+        });
+
+        // ❌ DELETE
+        holder.imgDelete.setOnClickListener(v -> {
+            list.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, list.size());
+            Toast.makeText(context, "Contact Deleted", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -56,16 +82,20 @@ public class EmergencyContactAdapter extends RecyclerView.Adapter<EmergencyConta
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtAvatar, txtName, txtRelation, txtPhone;
-        ImageView btnEdit;
+        TextView txtName, txtRelation, txtPhone;
+        ImageView imgCall, imgSms, imgEdit, imgDelete;
 
-        ViewHolder(View itemView) {
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtAvatar = itemView.findViewById(R.id.txtAvatar);
+
             txtName = itemView.findViewById(R.id.txtName);
             txtRelation = itemView.findViewById(R.id.txtRelation);
             txtPhone = itemView.findViewById(R.id.txtPhone);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
+            imgCall = itemView.findViewById(R.id.imgCall);
+            imgSms = itemView.findViewById(R.id.imgSms);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
         }
     }
 }

@@ -2,7 +2,9 @@ package com.example.accident_hotspot;
 
 public class EmergencyContact {
 
-    private String name, relation, phone;
+    private String name;
+    private String relation;
+    private String phone;
 
     public EmergencyContact(String name, String relation, String phone) {
         this.name = name;
@@ -10,7 +12,15 @@ public class EmergencyContact {
         this.phone = phone;
     }
 
-    public String getName() { return name; }
-    public String getRelation() { return relation; }
-    public String getPhone() { return phone; }
+    public String getName() {
+        return name;
+    }
+
+    public String getRelation() {
+        return relation;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
 }

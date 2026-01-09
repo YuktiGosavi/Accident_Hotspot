@@ -1,12 +1,16 @@
 package com.example.accident_hotspot;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +18,6 @@ import java.util.List;
 public class EmergencyContactActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    Button btnAdd;
     List<EmergencyContact> contactList;
 
     @Override
@@ -23,30 +26,38 @@ public class EmergencyContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_emergency_contact);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         recyclerView = findViewById(R.id.contactRecycler);
-        btnAdd = findViewById(R.id.btnAddContact);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         contactList = new ArrayList<>();
-        loadDummyContacts();
+        loadContacts();
 
-        recyclerView.setAdapter(
-                new EmergencyContactAdapter(this, contactList)
-        );
+        recyclerView.setAdapter(new EmergencyContactAdapter(this, contactList));
 
-        btnAdd.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Add Contact Clicked",
-                        Toast.LENGTH_SHORT).show()
-        );
+        findViewById(R.id.btnAddContact)
+                .setOnClickListener(v ->
+                        startActivity(new Intent(this, AddEmergencyContactActivity.class)));
     }
 
-    private void loadDummyContacts() {
-        contactList.add(new EmergencyContact("Rahul Jain","Brother","1142569886"));
-        contactList.add(new EmergencyContact("Anuska Sharma","Friend","00229269878"));
-        contactList.add(new EmergencyContact("Mom","Family","00189562838"));
+    private void loadContacts() {
+        SharedPreferences prefs = getSharedPreferences("EMERGENCY_CONTACTS", MODE_PRIVATE);
+        String data = prefs.getString("contacts", null);
+
+        if (data == null) return;
+
+        try {
+            JSONArray array = new JSONArray(data);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                contactList.add(new EmergencyContact(
+                        obj.getString("name"),
+                        obj.getString("relation"),
+                        obj.getString("phone")
+                ));
+            }
+        } catch (Exception ignored) {}
     }
 }

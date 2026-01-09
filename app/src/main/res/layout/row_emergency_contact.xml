@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_input"
+    android:layout_margin="6dp">
+
+
+
+
+
+
+    <!-- TEXT -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtRelation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imgCall"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_call"
+        android:padding="8dp"/>
+    <!-- SMS -->
+    <ImageView
+        android:id="@+id/imgSms"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_sms"
+        android:padding="8dp"/>
+
+    <!-- EDIT -->
+    <ImageView
+        android:id="@+id/imgEdit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_edites"
+        android:padding="8dp"/>
+
+    <!-- DELETE -->
+    <ImageView
+        android:id="@+id/imgDelete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_delete"
+        android:padding="8dp"/>
+</LinearLayout>
