@@ -2,13 +2,11 @@ package com.example.accident_hotspot;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,35 +41,12 @@ public class EmergencyContactAdapter
         holder.txtRelation.setText(contact.getRelation());
         holder.txtPhone.setText(contact.getPhone());
 
-        // 📞 CALL
+        // ✅ IN-APP CALL
         holder.imgCall.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_DIAL);
-            i.setData(Uri.parse("tel:" + contact.getPhone()));
-            context.startActivity(i);
-        });
-
-        // 📩 SMS
-        holder.imgSms.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse("sms:" + contact.getPhone()));
-            context.startActivity(i);
-        });
-
-        // ✏️ EDIT
-        holder.imgEdit.setOnClickListener(v -> {
-            Intent i = new Intent(context, AddEmergencyContactActivity.class);
-            i.putExtra("name", contact.getName());
-            i.putExtra("relation", contact.getRelation());
-            i.putExtra("phone", contact.getPhone());
-            context.startActivity(i);
-        });
-
-        // ❌ DELETE
-        holder.imgDelete.setOnClickListener(v -> {
-            list.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, list.size());
-            Toast.makeText(context, "Contact Deleted", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, EmergenceActivity.class);
+            intent.putExtra("name", contact.getName());
+            intent.putExtra("number", contact.getPhone());
+            context.startActivity(intent);
         });
     }
 
@@ -83,19 +58,14 @@ public class EmergencyContactAdapter
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtName, txtRelation, txtPhone;
-        ImageView imgCall, imgSms, imgEdit, imgDelete;
+        ImageView imgCall;
 
-
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             txtName = itemView.findViewById(R.id.txtName);
             txtRelation = itemView.findViewById(R.id.txtRelation);
             txtPhone = itemView.findViewById(R.id.txtPhone);
             imgCall = itemView.findViewById(R.id.imgCall);
-            imgSms = itemView.findViewById(R.id.imgSms);
-            imgEdit = itemView.findViewById(R.id.imgEdit);
-            imgDelete = itemView.findViewById(R.id.imgDelete);
         }
     }
 }
