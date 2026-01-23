@@ -1,9 +1,5 @@
 package com.example.accident_hotspot;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,10 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.*;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
@@ -27,10 +24,8 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         editor = prefs.edit();
 
-        // Already logged in?
         if (prefs.getBoolean("islogin", false)) {
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
             finish();
             return;
         }
@@ -53,77 +47,62 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp = findViewById(R.id.textSignUp);
         tvForgot = findViewById(R.id.textForgot);
 
-        btnLogin.setOnClickListener(view -> {
-            String email = etEmail.getText().toString().trim();
-            String pass = etPassword.getText().toString().trim();
+        btnLogin.setOnClickListener(v -> loginUser());
 
-            if (TextUtils.isEmpty(email)) {
-                etEmail.setError("Email required!");
-                return;
-            }
-            if (TextUtils.isEmpty(pass)) {
-                etPassword.setError("Password required!");
-                return;
-            }
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
-            String savedEmail = prefs.getString("email", "");
-            String savedPass = prefs.getString("password", "");
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-            if (email.equals(savedEmail) && pass.equals(savedPass)) {
-
-                editor.putBoolean("islogin", true);
-                editor.apply();
-
-                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                finish();
-            } else {
-                Toast.makeText(this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        googleSignInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .build();
-
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-
-        btnGoogle.setOnClickListener(v -> signInWithGoogle());
-
-        tvForgot.setOnClickListener(v ->
-                Toast.makeText(this, "Forgot Password Clicked!", Toast.LENGTH_SHORT).show());
+        btnGoogle.setOnClickListener(v ->
+                googleLauncher.launch(googleSignInClient.getSignInIntent()));
 
         tvSignUp.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class)));
+                startActivity(new Intent(this, SignUpActivity.class)));
+
+        tvForgot.setOnClickListener(v ->
+                Toast.makeText(this, "Forgot Password clicked", Toast.LENGTH_SHORT).show());
     }
 
-    private void signInWithGoogle() {
-        Intent intent = googleSignInClient.getSignInIntent();
-        startActivityForResult(intent, 100);
-    }
+    private void loginUser() {
+        String email = etEmail.getText().toString().trim();
+        String pass = etPassword.getText().toString().trim();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+            Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        if (requestCode == 100) {
-            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (email.equals(prefs.getString("email", "")) &&
+                pass.equals(prefs.getString("password", ""))) {
 
-            if (account != null) {
-                editor.putString("name", account.getDisplayName());
-                editor.putString("email", account.getEmail());
-                editor.putBoolean("islogin", true);
-                editor.apply();
-
-                Toast.makeText(this, "Google Login Successful!", Toast.LENGTH_SHORT).show();
-
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                finish();
-            } else {
-                Toast.makeText(this, "Google Sign-In Failed!", Toast.LENGTH_SHORT).show();
-            }
+            editor.putBoolean("islogin", true).apply();
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
         }
     }
+
+    ActivityResultLauncher<Intent> googleLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            GoogleSignInAccount account =
+                                    GoogleSignIn.getLastSignedInAccount(this);
+
+                            if (account != null) {
+                                editor.putString("name", account.getDisplayName());
+                                editor.putString("email", account.getEmail());
+                                editor.putBoolean("islogin", true);
+                                editor.apply();
+
+                                startActivity(new Intent(this, HomeActivity.class));
+                                finish();
+                            }
+                        }
+                    });
 }
