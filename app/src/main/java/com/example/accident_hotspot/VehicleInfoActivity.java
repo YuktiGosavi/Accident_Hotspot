@@ -1,13 +1,12 @@
 package com.example.accident_hotspot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.accident_hotspot.VehiclePrefManager;
 
 public class VehicleInfoActivity extends AppCompatActivity {
 
@@ -35,17 +34,13 @@ public class VehicleInfoActivity extends AppCompatActivity {
 
         loadData();
 
+        // 👉 OPEN ADD NEW VEHICLE SCREEN
         btnAdd.setOnClickListener(v -> {
-            manager.saveVehicle(
-                    "2024 Model",
-                    "MH-12-XY-9090",
-                    "SUV",
-                    "Electric",
-                    "5-Star",
-                    "01/2026"
+            Intent intent = new Intent(
+                    VehicleInfoActivity.this,
+                    AddnewVehicleActivity.class   // or AddNewVehicleActivity
             );
-            loadData();
-            Toast.makeText(this, "Vehicle Added", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
         });
 
         btnEdit.setOnClickListener(v ->
@@ -60,5 +55,11 @@ public class VehicleInfoActivity extends AppCompatActivity {
         tvFuel.setText("Fuel Type: " + manager.getFuel());
         tvRating.setText("Safety Rating: " + manager.getRating());
         tvService.setText("Last Service: " + manager.getService());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData(); // refresh after returning from AddVehicleActivity
     }
 }
