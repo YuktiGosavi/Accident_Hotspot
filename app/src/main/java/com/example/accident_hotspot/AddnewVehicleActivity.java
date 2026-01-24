@@ -1,8 +1,6 @@
 package com.example.accident_hotspot;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.*;
@@ -76,32 +74,43 @@ public class AddnewVehicleActivity extends AppCompatActivity {
             if (validate()) {
                 saveVehicle();
                 Toast.makeText(this, "Vehicle Added Successfully", Toast.LENGTH_LONG).show();
-                finish();
+                finish(); // go back to VehicleInfoActivity
             }
         });
     }
 
     private boolean validate() {
         if (spinnerMake.getSelectedItemPosition() == 0) return toast("Select Make");
-        if (etModel.getText().toString().isEmpty()) return error(etModel);
+        if (etModel.getText().toString().trim().isEmpty()) return error(etModel);
         if (spinnerYear.getSelectedItemPosition() == 0) return toast("Select Year");
-        if (etPlate.getText().toString().isEmpty()) return error(etPlate);
+        if (etPlate.getText().toString().trim().isEmpty()) return error(etPlate);
         if (spinnerType.getSelectedItemPosition() == 0) return toast("Select Vehicle Type");
         if (spinnerFuel.getSelectedItemPosition() == 0) return toast("Select Fuel Type");
         return true;
     }
 
+    // ✅ CORRECT SAVE METHOD (VehiclePrefManager)
     private void saveVehicle() {
-        SharedPreferences sp = getSharedPreferences("VEHICLE_DATA", MODE_PRIVATE);
-        sp.edit()
-                .putString("make", spinnerMake.getSelectedItem().toString())
-                .putString("model", etModel.getText().toString())
-                .putString("year", spinnerYear.getSelectedItem().toString())
-                .putString("plate", etPlate.getText().toString())
-                .putString("vin", etVin.getText().toString())
-                .putString("type", spinnerType.getSelectedItem().toString())
-                .putString("fuel", spinnerFuel.getSelectedItem().toString())
-                .apply();
+
+        VehiclePrefManager manager = new VehiclePrefManager(this);
+
+        String model = etModel.getText().toString();
+        String license = etPlate.getText().toString();
+        String type = spinnerType.getSelectedItem().toString();
+        String fuel = spinnerFuel.getSelectedItem().toString();
+
+        // Static for now (can be dynamic later)
+        String rating = "5-Star";
+        String service = "Not Scheduled";
+
+        manager.saveVehicle(
+                model,
+                license,
+                type,
+                fuel,
+                rating,
+                service
+        );
     }
 
     private boolean toast(String msg) {

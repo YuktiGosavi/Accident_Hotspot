@@ -5,15 +5,18 @@ import android.content.SharedPreferences;
 
 public class VehiclePrefManager {
 
-    private static final String PREF_NAME = "vehicle_pref";
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    // Use ONE preference name everywhere
+    private static final String PREF_NAME = "VEHICLE_DATA";
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
     public VehiclePrefManager(Context context) {
         pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = pref.edit();
     }
 
+    // SAVE VEHICLE DATA
     public void saveVehicle(String model, String license,
                             String type, String fuel,
                             String rating, String service) {
@@ -27,10 +30,34 @@ public class VehiclePrefManager {
         editor.apply();
     }
 
-    public String getModel() { return pref.getString("model", "2022 Model"); }
-    public String getLicense() { return pref.getString("license", "ABC-1234"); }
-    public String getType() { return pref.getString("type", "Sedan"); }
-    public String getFuel() { return pref.getString("fuel", "Electric"); }
-    public String getRating() { return pref.getString("rating", "5-Star"); }
-    public String getService() { return pref.getString("service", "12/2025"); }
+    // GETTERS (safe defaults – no crash)
+    public String getModel() {
+        return pref.getString("model", "No Vehicle Added");
+    }
+
+    public String getLicense() {
+        return pref.getString("license", "N/A");
+    }
+
+    public String getType() {
+        return pref.getString("type", "N/A");
+    }
+
+    public String getFuel() {
+        return pref.getString("fuel", "N/A");
+    }
+
+    public String getRating() {
+        return pref.getString("rating", "N/A");
+    }
+
+    public String getService() {
+        return pref.getString("service", "N/A");
+    }
+
+    // OPTIONAL: clear data (future use)
+    public void clearVehicle() {
+        editor.clear();
+        editor.apply();
+    }
 }
