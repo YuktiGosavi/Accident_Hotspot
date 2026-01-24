@@ -54,6 +54,7 @@
                     <EditText
                         android:id="@+id/etModel"
                         android:hint="Enter Model"
+                        android:padding="10sp"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/bg_inputs"
@@ -77,6 +78,7 @@
                     <EditText
                         android:id="@+id/etPlate"
                         android:hint="ABC-1234"
+                        android:padding="10sp"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/bg_inputs"
@@ -91,6 +93,7 @@
                         <EditText
                             android:id="@+id/etVin"
                             android:hint="Enter VIN"
+                            android:padding="10sp"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
                             android:layout_weight="1"
@@ -102,6 +105,7 @@
                             android:layout_height="50dp"
                             android:src="@drawable/ic_camera"
                             android:padding="12dp"/>
+
                     </LinearLayout>
 
                     <TextView
