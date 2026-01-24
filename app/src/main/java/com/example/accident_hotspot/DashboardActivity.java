@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class DashboardActivity extends AppCompatActivity {
 
     TextView viewDetails;
-    ImageView heavyTrafficItem, nearbyItem;   // FIXED TYPE
+    ImageView heavyTrafficItem, nearbyItem;
 
     @SuppressLint("WrongViewCast")
     @Override
