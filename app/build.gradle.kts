@@ -47,5 +47,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.loopj.android:android-async-http:1.4.11")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+
 
 }

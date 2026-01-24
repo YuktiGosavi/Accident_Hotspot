@@ -3,8 +3,7 @@ package com.example.accident_hotspot;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class DashboardActivity extends AppCompatActivity {
 
     TextView viewDetails;
-    LinearLayout heavyTrafficItem, nearbyItem;
+    ImageView heavyTrafficItem, nearbyItem;   // FIXED TYPE
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -21,25 +20,24 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         viewDetails = findViewById(R.id.btnViewDetails);
+
+        // FIXED — ImageView instead of LinearLayout
         heavyTrafficItem = findViewById(R.id.ivarrow1);
         nearbyItem = findViewById(R.id.ivarrow2);
 
         // View Details click
         viewDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, ViewDetailsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(DashboardActivity.this, ViewDetailsActivity.class));
         });
 
         // Heavy Traffic click
         heavyTrafficItem.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, HeavyTrafficActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(DashboardActivity.this, HeavyTrafficActivity.class));
         });
 
         // Nearby Pothole click
         nearbyItem.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, NearbyActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(DashboardActivity.this, NearbyActivity.class));
         });
     }
 }

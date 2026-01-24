@@ -72,7 +72,9 @@
                         android:layout_centerVertical="true"
                         android:backgroundTint="#EFEFEF"
                         android:textColor="#000"/>
+
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
 
             <!-- Trip Details -->
@@ -98,18 +100,24 @@
                         android:paddingBottom="12dp"/>
 
                     <!-- Row -->
-                    <include layout="@layout/trip_row"
+                    <include
+                        layout="@layout/trip_row"
                         android:id="@+id/rowDestination"/>
 
-                    <include layout="@layout/trip_row"
+                    <include
+                        layout="@layout/trip_row"
                         android:id="@+id/rowDistance"/>
 
-                    <include layout="@layout/trip_row"
+                    <include
+                        layout="@layout/trip_row"
                         android:id="@+id/rowSpeed"/>
 
-                    <include layout="@layout/trip_row"
+                    <include
+                        layout="@layout/trip_row"
                         android:id="@+id/rowArrival"/>
+
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <!-- AI Integration -->
@@ -149,5 +157,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

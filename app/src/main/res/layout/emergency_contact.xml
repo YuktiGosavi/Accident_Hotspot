@@ -59,4 +59,5 @@
         android:src="@drawable/ic_edites"
         android:layout_width="24dp"
         android:layout_height="24dp"/>
+
 </LinearLayout>

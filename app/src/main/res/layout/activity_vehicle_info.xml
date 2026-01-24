@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#111111"
+        android:paddingTop="15dp"
         app:title="Vehicle Information"
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_back"/>
@@ -32,12 +33,12 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:padding="16dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -45,6 +46,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:src="@drawable/ic_car"
+                        android:layout_gravity="center"
                         app:tint="#444"/>
 
                     <LinearLayout
@@ -58,6 +60,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/tvModel"
                             android:text="2022 Model"
+                            android:layout_marginTop="12dp"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="#000"/>
@@ -69,8 +72,11 @@
                             android:text="License Plate: ABC-1234"
                             android:textSize="14sp"
                             android:textColor="#666"/>
+
                     </LinearLayout>
+
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <!-- SAFETY SCORE -->
@@ -112,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="View Details"
+                        android:paddingTop="10sp"
                         android:textStyle="bold"
                         android:textColor="#FF5722"/>
                 </LinearLayout>
@@ -176,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:padding="12dp"
-                    android:text="⚠ AI Integration: Vehicle braking profile is used to calculate risk alerts."
+                    android:text="⚠ Vehicle braking profile is used to calculate risk alerts."
                     android:textColor="#D84315"/>
             </androidx.cardview.widget.CardView>
 
@@ -186,26 +193,46 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:id="@+id/btnEdit"
-                    android:layout_weight="1"
                     android:text="Edit Details"
+                    android:padding="15sp"
                     android:layout_marginEnd="8dp"
                     android:backgroundTint="#EEEEEE"
                     android:textColor="#000"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="50dp">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="15sp"
                     android:background="@drawable/logout_btn_bg"
                     android:text="Add New Vehicle"
                     android:textColor="#fff" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
