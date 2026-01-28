@@ -15,7 +15,7 @@
         android:background="#232323"
         app:title="My Profile"
         app:titleTextColor="#ffffff"
-        app:navigationIcon="@drawable/ic_back"/>
+        app:navigationIcon="@drawable/ic_back_arrow"/>
 
     <ScrollView
         android:layout_width="match_parent"

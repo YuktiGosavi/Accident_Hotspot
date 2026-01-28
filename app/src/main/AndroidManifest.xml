@@ -39,7 +39,10 @@
             android:exported="false" />
 
         <activity
-            android:name=".AddnewVehicleActivity"
+            android:name=".EditTripActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewVehicleActivity"
             android:exported="false" />
 
         <activity
