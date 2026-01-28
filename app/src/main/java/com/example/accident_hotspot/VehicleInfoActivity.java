@@ -38,7 +38,7 @@ public class VehicleInfoActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(
                     VehicleInfoActivity.this,
-                    AddnewVehicleActivity.class   // or AddNewVehicleActivity
+                    AddNewVehicleActivity.class   // or AddNewVehicleActivity
             );
             startActivity(intent);
         });

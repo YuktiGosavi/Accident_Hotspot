@@ -14,7 +14,7 @@
         android:paddingTop="20dp"
         app:title="Vehicle Information"
         app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_back"/>
+        app:navigationIcon="@drawable/ic_back_arrow"/>
 
     <ScrollView
         android:layout_width="match_parent"

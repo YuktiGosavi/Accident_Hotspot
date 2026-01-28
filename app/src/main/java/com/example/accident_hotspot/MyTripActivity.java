@@ -1,19 +1,50 @@
 package com.example.accident_hotspot;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
 
 public class MyTripActivity extends AppCompatActivity {
+
+    ImageView ivback, ivback1, ivback2, ivback3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_my_trip);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Toolbar Back Arrow Click
+        toolbar.setNavigationOnClickListener(v -> finish());
+
+        initViews();
+        setupListeners();
+    }
+
+    private void initViews() {
+        ivback = findViewById(R.id.ivback);
+        ivback1 = findViewById(R.id.ivback1);
+        ivback2 = findViewById(R.id.ivback2);
+        ivback3 = findViewById(R.id.ivback3);
+    }
+
+    private void setupListeners() {
+
+        View.OnClickListener editListener = v -> {
+            // Open Edit Trip Page
+            Intent intent = new Intent(MyTripActivity.this, EditTripActivity.class);
+            startActivity(intent);
+        };
+
+        ivback.setOnClickListener(editListener);
+        ivback1.setOnClickListener(editListener);
+        ivback2.setOnClickListener(editListener);
+        ivback3.setOnClickListener(editListener);
     }
 }
