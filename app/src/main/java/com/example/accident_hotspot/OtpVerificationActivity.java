@@ -21,7 +21,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
     TextView tvResend, tvLogin;
     AppCompatButton btnVerify;
 
-    String generatedOtp = "123456"; // demo OTP
+    String generatedOtp;   // OTP received from backend
     CountDownTimer countDownTimer;
 
     @Override
@@ -47,11 +47,11 @@ public class OtpVerificationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
+        // ================= GET OTP FROM INTENT =================
+        generatedOtp = getIntent().getStringExtra("otp");
+
         // ================= OTP AUTO MOVE =================
         setupOtpInputs();
-
-        // ================= AUTO FILL OTP FROM INTENT =================
-        autoFillOtpFromIntent();
 
         // ================= TIMER =================
         startResendTimer();
@@ -93,8 +93,8 @@ public class OtpVerificationActivity extends AppCompatActivity {
             this.next = next;
         }
 
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override public void afterTextChanged(Editable s) {}
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -102,30 +102,10 @@ public class OtpVerificationActivity extends AppCompatActivity {
                 next.requestFocus();
             }
         }
-
-        @Override
-        public void afterTextChanged(Editable s) {}
     }
 
     // =================================================
-    // AUTO FILL OTP FROM INTENT
-    // =================================================
-    private void autoFillOtpFromIntent() {
-
-        String otp = getIntent().getStringExtra("otp");
-
-        if (otp != null && otp.length() == 6) {
-            otp1.setText(String.valueOf(otp.charAt(0)));
-            otp2.setText(String.valueOf(otp.charAt(1)));
-            otp3.setText(String.valueOf(otp.charAt(2)));
-            otp4.setText(String.valueOf(otp.charAt(3)));
-            otp5.setText(String.valueOf(otp.charAt(4)));
-            otp6.setText(String.valueOf(otp.charAt(5)));
-        }
-    }
-
-    // =================================================
-    // VERIFY OTP → HOME ACTIVITY
+    // VERIFY OTP → HOME
     // =================================================
     private void verifyOtp() {
 
@@ -138,18 +118,17 @@ public class OtpVerificationActivity extends AppCompatActivity {
                         otp6.getText().toString();
 
         if (enteredOtp.length() < 6) {
-            Toast.makeText(this, "Please enter complete OTP", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enter complete OTP", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (enteredOtp.equals(generatedOtp)) {
+        if (generatedOtp != null && enteredOtp.equals(generatedOtp)) {
 
             Toast.makeText(this, "OTP Verified Successfully", Toast.LENGTH_SHORT).show();
 
-            // ✅ DIRECTLY GO TO HOME ACTIVITY
             Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
 
         } else {
             Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show();
@@ -157,11 +136,13 @@ public class OtpVerificationActivity extends AppCompatActivity {
     }
 
     // =================================================
-    // RESEND OTP
+    // RESEND OTP (EMAIL)
     // =================================================
     private void resendOtp() {
-        generatedOtp = "654321"; // demo new OTP
-        Toast.makeText(this, "OTP Resent Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "OTP resent to your email", Toast.LENGTH_SHORT).show();
+
+        // 👉 Call backend API here to resend email OTP
+        // generatedOtp = responseOtp;
     }
 
     // =================================================
