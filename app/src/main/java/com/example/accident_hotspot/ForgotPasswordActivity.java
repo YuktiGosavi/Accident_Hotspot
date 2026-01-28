@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.tasks.Task;
+
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -20,8 +23,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     View btnGetOtp;
 
     private CountDownTimer countDownTimer;
-    private final long totalTime = 60000; // 60 seconds
-    private final long interval = 1000;   // 1 second
+    private final long totalTime = 60000;
+    private final long interval = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         initViews();
         setupToolbar();
         clickListeners();
-        startTimer(); // Start countdown when screen opens
+        startTimer();
+        startSmsListener(); // 🔥 Start listening OTP automatically
     }
 
     private void initViews() {
@@ -45,10 +49,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
@@ -74,46 +75,37 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            // ✅ SUCCESS
-            Toast.makeText(ForgotPasswordActivity.this,
-                    "OTP Sent Successfully", Toast.LENGTH_SHORT).show();
+            // 🔥 Backend / Firebase OTP send happens here
+            Toast.makeText(this, "OTP sent to your phone", Toast.LENGTH_SHORT).show();
 
-            // ✅ OPEN OTP VERIFICATION SCREEN
-            Intent intent = new Intent(
-                    ForgotPasswordActivity.this,
-                    OtpVerificationActivity.class
-            );
-            intent.putExtra("new_password", newPass); // optional
-            startActivity(intent);
-
-            // Restart timer if OTP is requested again
             startTimer();
         });
 
         tvLogin.setOnClickListener(v -> finish());
     }
 
-    // ✅ Countdown Timer Logic
+    // 🔥 SMS Retriever (NO SMS permission needed)
+    private void startSmsListener() {
+        Task<Void> task = SmsRetriever.getClient(this).startSmsRetriever();
+        task.addOnSuccessListener(aVoid -> {
+            // Listener started
+        });
+        task.addOnFailureListener(e ->
+                Toast.makeText(this, "SMS listener failed", Toast.LENGTH_SHORT).show());
+    }
+
     private void startTimer() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
+        if (countDownTimer != null) countDownTimer.cancel();
 
         countDownTimer = new CountDownTimer(totalTime, interval) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000;
-                tvTimer.setText("Resend OTP in " + seconds + "s");
+                tvTimer.setText("Resend OTP in " + millisUntilFinished / 1000 + "s");
             }
 
             @Override
             public void onFinish() {
                 tvTimer.setText("Resend OTP");
-                tvTimer.setOnClickListener(v -> {
-                    Toast.makeText(ForgotPasswordActivity.this,
-                            "OTP Resent", Toast.LENGTH_SHORT).show();
-                    startTimer(); // restart timer on resend
-                });
             }
         }.start();
     }
@@ -121,8 +113,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
+        if (countDownTimer != null) countDownTimer.cancel();
     }
 }

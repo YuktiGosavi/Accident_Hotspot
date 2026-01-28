@@ -6,4 +6,15 @@
     </style>
 
     <style name="Theme.Accident_Hotspot" parent="Base.Theme.Accident_Hotspot" />
+    <style name="OtpBox">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/otp_bg</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+    </style>
+
 </resources>
