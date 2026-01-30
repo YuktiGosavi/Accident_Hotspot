@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- ✅ Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,103 +17,81 @@
         android:theme="@style/Theme.Accident_Hotspot"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <!-- ✅ OTP Broadcast Receiver (IMPORTANT) -->
-        <receiver
-            android:name=".OtpReceiver"
-            android:permission="com.google.android.gms.auth.api.phone.permission.SEND"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- ✅ Activities -->
         <activity
-            android:name=".OtpVerificationActivity"
+            android:name=".LiveLocationActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".HotspotAlertSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SOSSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SpeedLimitSettingsActivity"
+            android:exported="false" /> <!-- ✅ Activities -->
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
-
         <activity
             android:name=".EditTripActivity"
             android:exported="false" />
         <activity
             android:name=".AddNewVehicleActivity"
             android:exported="false" />
-
         <activity
             android:name=".HelpSupportActivity"
             android:exported="false" />
-
         <activity
             android:name=".MyTripActivity"
             android:exported="false" />
-
         <activity
             android:name=".VehicleInfoActivity"
             android:exported="false" />
-
         <activity
             android:name=".AddEmergencyContactActivity"
             android:exported="false" />
-
         <activity
             android:name=".EmergencyContactActivity"
             android:exported="false" />
-
         <activity
             android:name=".EmergenceActivity"
             android:exported="false" />
-
         <activity
             android:name=".NearbyActivity"
             android:exported="false" />
-
         <activity
             android:name=".HeavyTrafficActivity"
             android:exported="false" />
-
         <activity
             android:name=".ViewDetailsActivity"
             android:exported="false" />
-
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
-
         <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
-
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
-
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
-
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
-
-        <!-- ✅ Launcher -->
+            android:exported="true" /> <!-- ✅ Launcher -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

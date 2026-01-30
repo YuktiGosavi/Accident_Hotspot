@@ -12,7 +12,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         editor = prefs.edit();
 
+        // Auto login
         if (prefs.getBoolean("islogin", false)) {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
@@ -63,35 +67,50 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SignUpActivity.class)));
 
         tvForgot.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
-
+                startActivity(new Intent(this, ForgotPasswordActivity.class)));
     }
 
+    // ✅ LOGIN LOGIC (WORKS WITH UPDATED PASSWORD)
     private void loginUser() {
+
         String email = etEmail.getText().toString().trim();
         String pass = etPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
-            Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)) {
+            etEmail.setError("Enter email");
             return;
         }
 
-        if (email.equals(prefs.getString("email", "")) &&
-                pass.equals(prefs.getString("password", ""))) {
+        if (TextUtils.isEmpty(pass)) {
+            etPassword.setError("Enter password");
+            return;
+        }
 
-            editor.putBoolean("islogin", true).apply();
+        String savedEmail = prefs.getString("email", "");
+        String savedPassword = prefs.getString("password", "");
+
+        if (email.equals(savedEmail) && pass.equals(savedPassword)) {
+
+            editor.putBoolean("islogin", true);
+            editor.apply();
+
+            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(this, HomeActivity.class));
             finish();
+
         } else {
             Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // GOOGLE LOGIN
     ActivityResultLauncher<Intent> googleLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     result -> {
                         if (result.getResultCode() == RESULT_OK) {
+
                             GoogleSignInAccount account =
                                     GoogleSignIn.getLastSignedInAccount(this);
 

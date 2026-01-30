@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer warning circle -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="
+            M12,2
+            C6.48,2 2,6.48 2,12
+            c0,5.52 4.48,10 10,10
+            s10,-4.48 10,-10
+            C22,6.48 17.52,2 12,2z" />
+
+    <!-- Speed meter needle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M12,6
+            a6,6 0 1,0 6,6
+            h-2
+            a4,4 0 1,1 -4,-4z" />
+
+    <!-- Speed needle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M12,12
+            l4,-4
+            l1,1
+            l-4,4z" />
+
+</vector>

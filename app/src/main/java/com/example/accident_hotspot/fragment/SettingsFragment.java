@@ -1,66 +1,141 @@
 package com.example.accident_hotspot.fragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import com.example.accident_hotspot.HotspotAlertSettingsActivity;
+import com.example.accident_hotspot.LiveLocationActivity;
 import com.example.accident_hotspot.R;
+import com.example.accident_hotspot.SOSSettingsActivity;
+import com.example.accident_hotspot.SpeedLimitSettingsActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SettingsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    Toolbar toolbar;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    LinearLayout layoutEmergencyContacts;
+    LinearLayout layoutSOS;
+    LinearLayout layoutHotspotAlerts;
+    LinearLayout layoutLiveLocation;
+    LinearLayout layoutPermission;
+    LinearLayout layoutClearData;
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
+    SharedPreferences sharedPreferences;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        // Toolbar
+        toolbar = view.findViewById(R.id.toolbarSettings);
+
+        // Layout IDs
+        layoutEmergencyContacts = view.findViewById(R.id.layoutEmergencyContacts);
+        layoutSOS = view.findViewById(R.id.layoutSOS);
+        layoutHotspotAlerts = view.findViewById(R.id.layoutHotspotAlerts);
+        layoutLiveLocation = view.findViewById(R.id.layoutLiveLocation);
+        layoutPermission = view.findViewById(R.id.layoutPermission);
+        layoutClearData = view.findViewById(R.id.layoutClearData);
+
+        sharedPreferences = requireActivity()
+                .getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
+
+        setupToolbar();
+        clickListeners();
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+    private void setupToolbar() {
+        toolbar.setNavigationOnClickListener(v ->
+                requireActivity().onBackPressed()
+        );
+    }
+
+    private void clickListeners() {
+
+        // 🚦 Speed Limit Alerts
+        layoutEmergencyContacts.setOnClickListener(v -> {
+            Toast.makeText(getContext(),
+                    "Speed Limit Alerts Settings",
+                    Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(getContext(),
+                    SpeedLimitSettingsActivity.class));
+        });
+
+        // 🆘 SOS Settings
+        layoutSOS.setOnClickListener(v -> {
+            Toast.makeText(getContext(),
+                    "SOS Alert Settings",
+                    Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(getContext(),
+                    SOSSettingsActivity.class));
+        });
+
+        // ⚠ Accident Hotspot Alerts
+        layoutHotspotAlerts.setOnClickListener(v -> {
+            Toast.makeText(getContext(),
+                    "Accident Hotspot Alerts",
+                    Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(getContext(),
+                    HotspotAlertSettingsActivity.class));
+        });
+
+        // 📍 Live Location Sharing
+        layoutLiveLocation.setOnClickListener(v -> {
+            Toast.makeText(getContext(),
+                    "Live Location Sharing",
+                    Toast.LENGTH_SHORT).show();
+
+            startActivity(new Intent(getContext(),
+                    LiveLocationActivity.class));
+        });
+
+        // 🔐 Location Permissions
+        layoutPermission.setOnClickListener(v -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package",
+                    requireActivity().getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        });
+
+        // 🗑 Clear App Data
+        layoutClearData.setOnClickListener(v -> {
+            clearAppData();
+        });
+    }
+
+    private void clearAppData() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Toast.makeText(getContext(),
+                "App data cleared successfully",
+                Toast.LENGTH_SHORT).show();
     }
 }

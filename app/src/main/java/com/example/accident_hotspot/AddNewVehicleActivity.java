@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddnewVehicleActivity extends AppCompatActivity {
+public class AddNewVehicleActivity extends AppCompatActivity {
 
     Spinner spinnerMake, spinnerYear, spinnerType, spinnerFuel;
     EditText etModel, etPlate, etVin;
