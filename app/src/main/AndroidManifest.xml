@@ -18,6 +18,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MapViewActivity"
+            android:exported="false" />
+        <!-- ✅ ADD YOUR GOOGLE MAPS API KEY HERE -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAf-cUQXfRM1DftGGmZcn69dzo4LBG3Xt0" /> <!-- ✅ END API KEY -->
+        <activity
             android:name=".LiveLocationActivity"
             android:exported="false" />
         <activity
@@ -46,15 +53,6 @@
             android:exported="false" />
         <activity
             android:name=".VehicleInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddEmergencyContactActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EmergencyContactActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EmergenceActivity"
             android:exported="false" />
         <activity
             android:name=".NearbyActivity"

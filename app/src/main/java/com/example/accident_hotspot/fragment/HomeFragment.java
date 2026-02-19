@@ -1,66 +1,108 @@
 package com.example.accident_hotspot.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.accident_hotspot.R;
+import com.example.accident_hotspot.MapViewActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView txtTraffic, txtWeather, txtEmergency;
+    private TextView txtSafetyScoreValue, txtPastAlertsValue;
+    private LinearLayout alertCard;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Google Map reference
+    private GoogleMap mMap;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Initialize views
+        alertCard = view.findViewById(R.id.alertCard);
+
+        txtTraffic = view.findViewById(R.id.txtTraffic);
+        txtWeather = view.findViewById(R.id.txtWeather);
+        txtEmergency = view.findViewById(R.id.txtEmergency);
+
+        txtSafetyScoreValue = view.findViewById(R.id.txtSafetyScoreValue);
+        txtPastAlertsValue = view.findViewById(R.id.txtPastAlertsValue);
+
+        // Load dashboard values
+        loadDashboardData();
+        loadConditions();
+
+        // Click listener for alert card
+        alertCard.setOnClickListener(v ->
+                Toast.makeText(getContext(), "Alert details opened", Toast.LENGTH_SHORT).show()
+        );
+
+        // Initialize the map
+        SupportMapFragment mapFragment = (SupportMapFragment)
+                getChildFragmentManager().findFragmentById(R.id.homeMap);
+
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
         }
+
+        return view;
     }
 
+    // Map is ready callback
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Example accident location
+        LatLng accidentSpot = new LatLng(28.6139, 77.2090); // Delhi example
+
+        // Add marker
+        mMap.addMarker(new MarkerOptions()
+                .position(accidentSpot)
+                .title("Accident Spot"));
+
+        // Move camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(accidentSpot, 14));
+
+        // Map click listener → open full-screen map
+        mMap.setOnMapClickListener(latLng -> {
+            // Open MapviewActivity
+            if (getContext() != null) {
+                startActivity(new Intent(getContext(), MapViewActivity.class));
+            }
+        });
+    }
+
+    private void loadConditions() {
+        txtTraffic.setText("Traffic\nCongested");
+        txtWeather.setText("Weather\nFog");
+        txtEmergency.setText("Emergency\nHospital Nearby");
+    }
+
+    private void loadDashboardData() {
+        txtSafetyScoreValue.setText("82%");
+        txtPastAlertsValue.setText("5");
     }
 }

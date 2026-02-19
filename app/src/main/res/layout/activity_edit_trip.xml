@@ -1,10 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditTripActivity">
+    android:background="#F8F4EF">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--  TOOLBAR ADDED HERE  -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingTop="20dp"
+        android:background="#232323"
+        app:title="Edit Trip Details"
+        app:titleTextColor="#ffffff"
+        app:navigationIcon="@drawable/ic_back_arrow"/>
+
+    <!--  SCROLL CONTENT -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <!-- DESTINATION -->
+            <LinearLayout
+                android:id="@+id/layoutDestination"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/card_bg"
+                android:padding="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Edit Destination"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <!-- Country -->
+                <TextView
+                    android:layout_marginTop="12dp"
+                    android:text="Select Country"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinnerCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- State -->
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:text="Select State"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinnerState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- City -->
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:text="Select City"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinnerCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- SAVE DESTINATION -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveDestination"
+                    android:text="Save Destination"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/logout_btn_bg"
+                    android:layout_marginTop="18dp"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- DISTANCE -->
+            <LinearLayout
+                android:id="@+id/layoutDistance"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/card_bg"
+                android:padding="18dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Edit Distance"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/etDistance"
+                    android:layout_marginTop="12dp"
+                    android:hint="Enter Distance (KM)"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/edittext_bg"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveDistance"
+                    android:text="Save Distance"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/logout_btn_bg"
+                    android:layout_marginTop="18dp"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- AVERAGE SPEED -->
+            <LinearLayout
+                android:id="@+id/layoutAvgSpeed"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/card_bg"
+                android:padding="18dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Edit Average Speed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/etAvgSpeed"
+                    android:layout_marginTop="12dp"
+                    android:hint="Enter Average Speed (km/h)"
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/edittext_bg"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveAvgSpeed"
+                    android:text="Save Average Speed"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/logout_btn_bg"
+                    android:layout_marginTop="18dp"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- ARRIVAL TIME -->
+            <LinearLayout
+                android:id="@+id/layoutArrivalTime"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/card_bg"
+                android:padding="18dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Edit Arrival Time"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/etArrivalTime"
+                    android:layout_marginTop="12dp"
+                    android:hint="Enter Arrival Time (12:45 PM)"
+                    android:inputType="text"
+                    android:background="@drawable/edittext_bg"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveArrivalTime"
+                    android:text="Save Arrival Time"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/logout_btn_bg"
+                    android:layout_marginTop="18dp"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

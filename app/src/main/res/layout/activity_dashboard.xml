@@ -15,7 +15,7 @@
         android:background="#232323"
         app:title="Dashboard"
         app:titleTextColor="#ffffff"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="@drawable/ic_back_arrow"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView

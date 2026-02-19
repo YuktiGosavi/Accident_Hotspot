@@ -25,7 +25,6 @@ import com.example.accident_hotspot.SpeedLimitSettingsActivity;
 
 public class SettingsFragment extends Fragment {
 
-    Toolbar toolbar;
 
     LinearLayout layoutEmergencyContacts;
     LinearLayout layoutSOS;
@@ -46,9 +45,6 @@ public class SettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        // Toolbar
-        toolbar = view.findViewById(R.id.toolbarSettings);
-
         // Layout IDs
         layoutEmergencyContacts = view.findViewById(R.id.layoutEmergencyContacts);
         layoutSOS = view.findViewById(R.id.layoutSOS);
@@ -60,18 +56,10 @@ public class SettingsFragment extends Fragment {
         sharedPreferences = requireActivity()
                 .getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
 
-        setupToolbar();
         clickListeners();
 
         return view;
     }
-
-    private void setupToolbar() {
-        toolbar.setNavigationOnClickListener(v ->
-                requireActivity().onBackPressed()
-        );
-    }
-
     private void clickListeners() {
 
         // 🚦 Speed Limit Alerts

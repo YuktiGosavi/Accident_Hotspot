@@ -13,35 +13,28 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ImageView;
+
+import com.example.accident_hotspot.fragment.CallFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.accident_hotspot.fragment.HomeFragment;
+import com.example.accident_hotspot.fragment.ReportFragment;
 import com.example.accident_hotspot.fragment.SettingsFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    ImageView mapImage;
-    LinearLayout alertCard;
     BottomNavigationView bottomNav;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-
-    // info boxes
-    TextView txtTraffic, txtWeather, txtEmergency;
-
-    // dashboard values
-    TextView txtSafetyScore, txtPastAlerts, txtSafetyScoreValue, txtPastAlertsValue;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -52,17 +45,20 @@ public class HomeActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
         editor = preferences.edit();
 
-        boolean isFirstTime = preferences.getBoolean("isFirstTime", true);
-        if (isFirstTime) welcomePopup();
+        // Welcome popup first time only
+        if (preferences.getBoolean("isFirstTime", true)) welcomePopup();
 
         setupToolbar();
         initializeViews();
         setupDrawerHeader();
-        setupDrawerMenuClick(); // <-- ADDED
+        setupDrawerMenuClick();
         setupBottomNav();
-        setupMapClick();
 
-        updateDynamicData();
+        // ⭐ Load HomeFragment initially
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new HomeFragment())
+                .commit();
     }
 
     private void welcomePopup() {
@@ -84,27 +80,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        mapImage = findViewById(R.id.mapView);
-
-        txtTraffic = findViewById(R.id.txtTraffic);
-        txtWeather = findViewById(R.id.txtWeather);
-        txtEmergency = findViewById(R.id.txtEmergency);
-
-        txtSafetyScore = findViewById(R.id.txtSafetyScore);
-        txtPastAlerts = findViewById(R.id.txtPastAlerts);
-
-        txtSafetyScoreValue = findViewById(R.id.txtSafetyScoreValue);
-        txtPastAlertsValue = findViewById(R.id.txtPastAlertsValue);
-
-        alertCard = findViewById(R.id.alertCard);
-
         bottomNav = findViewById(R.id.bottomNav);
-
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
     }
 
-    // Drawer Header Update
+    // Drawer Header Data
     private void setupDrawerHeader() {
         View headerView = navigationView.getHeaderView(0);
 
@@ -124,9 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
     }
 
-    // -------------------------------------------------------------------------
-    // Drawer Menu Click Listener (ADDED)
-    // -------------------------------------------------------------------------
+    // Drawer Menu Click Events
     private void setupDrawerMenuClick() {
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -135,9 +114,6 @@ public class HomeActivity extends AppCompatActivity {
 
             if (id == R.id.nav_dashboard) {
                 startActivity(new Intent(HomeActivity.this, DashboardActivity.class));
-
-            } else if (id == R.id.nav_contacts) {
-                startActivity(new Intent(HomeActivity.this, EmergencyContactActivity.class));
 
             } else if (id == R.id.nav_trips) {
                 startActivity(new Intent(HomeActivity.this, MyTripActivity.class));
@@ -154,27 +130,9 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-
-    private void setupMapClick() {
-        mapImage.setOnClickListener(v ->
-                Toast.makeText(this, "Map clicked", Toast.LENGTH_SHORT).show());
-    }
-
+    // Bottom Navigation → Fragment Switching
     private void setupBottomNav() {
         bottomNav.setOnItemSelectedListener(this::onNavigationItemSelected);
-    }
-
-    private void updateDynamicData() {
-
-        txtTraffic.setText("Moderate");
-        txtWeather.setText("Clear");
-        txtEmergency.setText("Police Nearby");
-
-        txtSafetyScoreValue.setText("82%");
-        txtPastAlertsValue.setText("5");
-
-        alertCard.setOnClickListener(v ->
-                Toast.makeText(this, "Hotspot Warning: Slow Down!", Toast.LENGTH_SHORT).show());
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -182,25 +140,40 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new HomeFragment())
+                    .commit();
+
             return true;
 
         } else if (id == R.id.nav_reports) {
-            Toast.makeText(this, "Report Accident", Toast.LENGTH_SHORT).show();
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new ReportFragment())
+                    .commit();
+
             return true;
 
         } else if (id == R.id.nav_emergency) {
-            startActivity(new Intent(HomeActivity.this, EmergenceActivity.class));
-            Toast.makeText(this, "Emergency", Toast.LENGTH_SHORT).show();
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new CallFragment())
+                    .addToBackStack(null)
+                    .commit();
             return true;
 
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, new SettingsFragment())
                     .addToBackStack(null)
                     .commit();
+
             return true;
         }
 

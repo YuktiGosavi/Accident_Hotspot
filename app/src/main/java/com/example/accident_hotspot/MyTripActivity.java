@@ -28,23 +28,40 @@ public class MyTripActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ivback = findViewById(R.id.ivback);
-        ivback1 = findViewById(R.id.ivback1);
-        ivback2 = findViewById(R.id.ivback2);
-        ivback3 = findViewById(R.id.ivback3);
+        ivback = findViewById(R.id.ivback);     // Destination
+        ivback1 = findViewById(R.id.ivback1);   // Distance
+        ivback2 = findViewById(R.id.ivback2);   // Avg Speed
+        ivback3 = findViewById(R.id.ivback3);   // Arrival Time
     }
 
     private void setupListeners() {
 
-        View.OnClickListener editListener = v -> {
-            // Open Edit Trip Page
+        // OPEN DESTINATION
+        ivback.setOnClickListener(v -> {
             Intent intent = new Intent(MyTripActivity.this, EditTripActivity.class);
+            intent.putExtra("editType", "destination");
             startActivity(intent);
-        };
+        });
 
-        ivback.setOnClickListener(editListener);
-        ivback1.setOnClickListener(editListener);
-        ivback2.setOnClickListener(editListener);
-        ivback3.setOnClickListener(editListener);
+        // OPEN DISTANCE
+        ivback1.setOnClickListener(v -> {
+            Intent intent = new Intent(MyTripActivity.this, EditTripActivity.class);
+            intent.putExtra("editType", "distance");
+            startActivity(intent);
+        });
+
+        // OPEN AVG SPEED
+        ivback2.setOnClickListener(v -> {
+            Intent intent = new Intent(MyTripActivity.this, EditTripActivity.class);
+            intent.putExtra("editType", "avg_speed");
+            startActivity(intent);
+        });
+
+        // OPEN ARRIVAL TIME
+        ivback3.setOnClickListener(v -> {
+            Intent intent = new Intent(MyTripActivity.this, EditTripActivity.class);
+            intent.putExtra("editType", "arrival_time");
+            startActivity(intent);
+        });
     }
 }

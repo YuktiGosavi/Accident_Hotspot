@@ -1,118 +1,50 @@
 package com.example.accident_hotspot.fragment;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
+import com.example.accident_hotspot.CallAdapter;
+import com.example.accident_hotspot.CallModel;
 import com.example.accident_hotspot.R;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
 
 public class CallFragment extends Fragment {
 
-    private Toolbar toolbar;
-    private TextView txtCallTimer;
-    private ImageView icMicOff, icCallEnd, icAddContact;
+    RecyclerView recyclerCalls;
+    ArrayList<CallModel> list;
+    CallAdapter adapter;
 
-    private Handler handler = new Handler();
-    private int seconds = 0;
-    private boolean isMuted = false;
-
-    private final Runnable timerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            seconds++;
-            int min = seconds / 60;
-            int sec = seconds % 60;
-            txtCallTimer.setText(String.format("%02d:%02d", min, sec));
-            handler.postDelayed(this, 1000);
-        }
-    };
-
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_call, container, false);
 
-        // Bind Views (NO ERROR)
-        toolbar = view.findViewById(R.id.toolbar);
-        txtCallTimer = view.findViewById(R.id.txtCallTimer);
-        icMicOff = view.findViewById(R.id.ic_mic_off_btn);
-        icCallEnd = view.findViewById(R.id.ic_call_end_btn);
-        icAddContact = view.findViewById(R.id.ic_add_contacts_btn);
+        recyclerCalls = view.findViewById(R.id.recyclerCalls);
 
-        toolbar.setNavigationOnClickListener(v ->
-                requireActivity().onBackPressed()
-        );
+        // Load Call List
+        list = new ArrayList<>();
+        loadCallLogs();
 
-        startTimer();
-        makeEmergencyCall();
-        setupClicks();
+        adapter = new CallAdapter(list, getContext());
+        recyclerCalls.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerCalls.setAdapter(adapter);
 
         return view;
     }
 
-    private void startTimer() {
-        handler.post(timerRunnable);
-    }
+    private void loadCallLogs() {
 
-    private void makeEmergencyCall() {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:112"));
+        list.add(new CallModel("Rahul Sharma", "Today, 9:45 AM", R.drawable.ic_call_received, "9876543210"));
+        list.add(new CallModel("Neha", "Yesterday, 7:10 PM", R.drawable.ic_call_made, "9876501234"));
+        list.add(new CallModel("Amit Kumar", "Yesterday, 5:30 PM", R.drawable.ic_call_missed, "9988776655"));
+        list.add(new CallModel("Priya", "2 Feb, 11:00 AM", R.drawable.ic_call_received, "8877665544"));
 
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    new String[]{Manifest.permission.CALL_PHONE},
-                    101
-            );
-            return;
-        }
-        startActivity(intent);
-    }
-
-    private void setupClicks() {
-
-        icMicOff.setOnClickListener(v -> {
-            isMuted = !isMuted;
-            Toast.makeText(requireContext(),
-                    isMuted ? "Call Muted" : "Call Unmuted",
-                    Toast.LENGTH_SHORT).show();
-        });
-
-        icCallEnd.setOnClickListener(v -> {
-            handler.removeCallbacks(timerRunnable);
-            Toast.makeText(requireContext(),
-                    "Call Ended", Toast.LENGTH_SHORT).show();
-            requireActivity().onBackPressed();
-        });
-
-        icAddContact.setOnClickListener(v ->
-                Toast.makeText(requireContext(),
-                        "Add Contact Clicked",
-                        Toast.LENGTH_SHORT).show()
-        );
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        handler.removeCallbacks(timerRunnable);
     }
 }
