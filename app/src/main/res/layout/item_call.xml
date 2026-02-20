@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:text="Rahul Sharma"
             android:textSize="18sp"
-            android:textStyle="bold"
             android:textColor="#000"/>
 
         <LinearLayout
@@ -65,6 +64,6 @@
         android:id="@+id/btnCall"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_baseline_phone_24"
-        app:tint="#4CAF50" />
+        android:src="@drawable/ic_baseline_phone_24" />
+
 </LinearLayout>
