@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,16 +30,15 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout alertCard;
     BottomNavigationView bottomNav;
 
-    SharedPreferences preferences;
+    SharedPreferences preferences, userPrefs;
     SharedPreferences.Editor editor;
 
     TextView txtTraffic, txtWeather, txtEmergency;
-    TextView txtSafetyScore, txtPastAlerts, txtSafetyScoreValue, txtPastAlertsValue;
+    TextView txtSafetyScoreValue, txtPastAlertsValue;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,10 +48,9 @@ public class HomeActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
 
-        initializeViews();
+        userPrefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
 
-        boolean isFirstTime = preferences.getBoolean("isFirstTime", true);
-        if (isFirstTime) welcomePopup();
+        initializeViews();
 
         setupToolbar();
 
@@ -66,6 +63,8 @@ public class HomeActivity extends AppCompatActivity {
         setupMapClick();
 
         updateDynamicData();
+
+        showWelcomePopup();
     }
 
 
@@ -75,16 +74,6 @@ public class HomeActivity extends AppCompatActivity {
 
         mapImage = findViewById(R.id.mapView);
 
-        txtTraffic = findViewById(R.id.txtTraffic);
-        txtWeather = findViewById(R.id.txtWeather);
-        txtEmergency = findViewById(R.id.txtEmergency);
-
-        txtSafetyScore = findViewById(R.id.txtSafetyScore);
-        txtPastAlerts = findViewById(R.id.txtPastAlerts);
-
-        txtSafetyScoreValue = findViewById(R.id.txtSafetyScoreValue);
-        txtPastAlertsValue = findViewById(R.id.txtPastAlertsValue);
-
         alertCard = findViewById(R.id.alertCard);
 
         bottomNav = findViewById(R.id.bottomNav);
@@ -92,23 +81,19 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
 
         navigationView = findViewById(R.id.navigationView);
+
+
+        txtTraffic = findViewById(R.id.txtTraffic);
+
+        txtWeather = findViewById(R.id.txtWeather);
+
+        txtEmergency = findViewById(R.id.txtEmergency);
+
+        txtSafetyScoreValue = findViewById(R.id.txtSafetyScoreValue);
+
+        txtPastAlertsValue = findViewById(R.id.txtPastAlertsValue);
     }
 
-
-    private void welcomePopup() {
-
-        AlertDialog.Builder ad = new AlertDialog.Builder(this);
-
-        ad.setTitle("Accident Hotspot Finder");
-
-        ad.setMessage("Welcome to Accident Hotspot Finder");
-
-        ad.setPositiveButton("Thank You", (dialog, which) -> dialog.dismiss());
-
-        ad.show();
-
-        editor.putBoolean("isFirstTime", false).apply();
-    }
 
 
     private void setupToolbar() {
@@ -123,37 +108,38 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupDrawerHeader() {
 
-        View headerView = navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
 
-        if (headerView == null)
+        if (header == null)
             return;
 
-        TextView txtName = headerView.findViewById(R.id.txtName);
 
-        TextView txtEmail = headerView.findViewById(R.id.txtEmail);
+        TextView txtName = header.findViewById(R.id.txtName);
 
-        ImageView profileImage = headerView.findViewById(R.id.profileImage);
+        TextView txtEmail = header.findViewById(R.id.txtEmail);
 
-
-        SharedPreferences prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
-
-        txtName.setText(prefs.getString("name", "Your Name"));
-
-        txtEmail.setText(prefs.getString("email", "your@gmail.com"));
+        ImageView profileImage = header.findViewById(R.id.profileImage);
 
 
-        String imgUri = prefs.getString("profileImage", "");
+        if (txtName != null)
+            txtName.setText(userPrefs.getString("name", "Your Name"));
 
-        if (!imgUri.isEmpty())
-            profileImage.setImageURI(android.net.Uri.parse(imgUri));
+
+        if (txtEmail != null)
+            txtEmail.setText(userPrefs.getString("email", "your@email.com"));
 
 
         if (profileImage != null) {
 
+            String img = userPrefs.getString("profileImage", "");
+
+            if (!img.isEmpty())
+                profileImage.setImageURI(android.net.Uri.parse(img));
+
+
             profileImage.setOnClickListener(v ->
 
                     startActivity(new Intent(this, ProfileActivity.class)));
-
         }
     }
 
@@ -165,44 +151,23 @@ public class HomeActivity extends AppCompatActivity {
 
             int id = item.getItemId();
 
-            if (id == R.id.nav_dashboard) {
-
+            if (id == R.id.nav_dashboard)
                 startActivity(new Intent(this, DashboardActivity.class));
 
-            }
-            else if (id == R.id.nav_trips) {
-
+            else if (id == R.id.nav_trips)
                 startActivity(new Intent(this, MyTripActivity.class));
 
-            }
-            else if (id == R.id.nav_vehicle) {
-
+            else if (id == R.id.nav_vehicle)
                 startActivity(new Intent(this, VehicleInfoActivity.class));
 
-            }
-            else if (id == R.id.nav_help) {
-
+            else if (id == R.id.nav_help)
                 startActivity(new Intent(this, HelpSupportActivity.class));
 
-            }
 
             drawerLayout.closeDrawer(GravityCompat.START);
 
             return true;
         });
-    }
-
-
-
-    private void setupMapClick() {
-
-        if (mapImage != null) {
-
-            mapImage.setOnClickListener(v ->
-
-                    Toast.makeText(this, "Map clicked", Toast.LENGTH_SHORT).show());
-
-        }
     }
 
 
@@ -214,24 +179,65 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+    private void setupMapClick() {
+
+        if (mapImage != null)
+
+            mapImage.setOnClickListener(v ->
+
+                    Toast.makeText(this, "Map Clicked", Toast.LENGTH_SHORT).show());
+    }
+
+
+
     private void updateDynamicData() {
 
-        txtTraffic.setText("Moderate");
+        if (txtTraffic != null)
+            txtTraffic.setText("Moderate");
 
-        txtWeather.setText("Clear");
+        if (txtWeather != null)
+            txtWeather.setText("Clear");
 
-        txtEmergency.setText("Police Nearby");
+        if (txtEmergency != null)
+            txtEmergency.setText("Police Nearby");
 
-        txtSafetyScoreValue.setText("82%");
+        if (txtSafetyScoreValue != null)
+            txtSafetyScoreValue.setText("82%");
 
-        txtPastAlertsValue.setText("5");
+        if (txtPastAlertsValue != null)
+            txtPastAlertsValue.setText("5");
 
 
-        alertCard.setOnClickListener(v ->
+        if (alertCard != null)
+            alertCard.setOnClickListener(v ->
 
-                Toast.makeText(this,
-                        "Hotspot Warning: Slow Down!",
-                        Toast.LENGTH_SHORT).show());
+                    Toast.makeText(this,
+                            "Danger Hotspot Ahead",
+                            Toast.LENGTH_SHORT).show());
+    }
+
+
+
+    private void showWelcomePopup() {
+
+        boolean first = preferences.getBoolean("first", true);
+
+        if (!first)
+            return;
+
+
+        new AlertDialog.Builder(this)
+
+                .setTitle("Accident Hotspot Finder")
+
+                .setMessage("Welcome to Accident Hotspot Finder")
+
+                .setPositiveButton("OK", null)
+
+                .show();
+
+
+        editor.putBoolean("first", false).apply();
     }
 
 
@@ -240,33 +246,20 @@ public class HomeActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-
+        if (id == R.id.nav_home)
             Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
 
-            return true;
-        }
-        else if (id == R.id.nav_reports) {
+        else if (id == R.id.nav_reports)
+            Toast.makeText(this, "Report", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, "Report Accident", Toast.LENGTH_SHORT).show();
-
-            return true;
-        }
-        else if (id == R.id.nav_settings) {
-
+        else if (id == R.id.nav_settings)
             getSupportFragmentManager()
-
                     .beginTransaction()
-
-                    .replace(R.id.fragmentContainer, new SettingsFragment())
-
-                    .addToBackStack(null)
-
+                    .replace(R.id.fragmentContainer,
+                            new SettingsFragment())
                     .commit();
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
+
 }
