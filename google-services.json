@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "777443208799",
+    "project_id": "accident-hotspot-8f6f8",
+    "storage_bucket": "accident-hotspot-8f6f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777443208799:android:0f69b25db8ba46056375ea",
+        "android_client_info": {
+          "package_name": "com.example.accident_hotspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777443208799-dma2sgb4h8gggnl8eupuc6so4s8tre6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV2Sxo891D0ayJ2Tg-2VstZVMkNIIo0eE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777443208799-dma2sgb4h8gggnl8eupuc6so4s8tre6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

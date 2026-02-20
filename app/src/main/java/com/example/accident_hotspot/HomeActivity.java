@@ -13,28 +13,35 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.ImageView;
-
-import com.example.accident_hotspot.fragment.CallFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.accident_hotspot.fragment.HomeFragment;
-import com.example.accident_hotspot.fragment.ReportFragment;
 import com.example.accident_hotspot.fragment.SettingsFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
+    ImageView mapImage;
+    LinearLayout alertCard;
     BottomNavigationView bottomNav;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+
+    // info boxes
+    TextView txtTraffic, txtWeather, txtEmergency;
+
+    // dashboard values
+    TextView txtSafetyScore, txtPastAlerts, txtSafetyScoreValue, txtPastAlertsValue;
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,20 +52,17 @@ public class HomeActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
         editor = preferences.edit();
 
-        // Welcome popup first time only
-        if (preferences.getBoolean("isFirstTime", true)) welcomePopup();
+        boolean isFirstTime = preferences.getBoolean("isFirstTime", true);
+        if (isFirstTime) welcomePopup();
 
         setupToolbar();
         initializeViews();
         setupDrawerHeader();
-        setupDrawerMenuClick();
+        setupDrawerMenuClick(); // <-- ADDED
         setupBottomNav();
+        setupMapClick();
 
-        // ⭐ Load HomeFragment initially
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, new HomeFragment())
-                .commit();
+        updateDynamicData();
     }
 
     private void welcomePopup() {
@@ -80,12 +84,27 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        mapImage = findViewById(R.id.mapView);
+
+        txtTraffic = findViewById(R.id.txtTraffic);
+        txtWeather = findViewById(R.id.txtWeather);
+        txtEmergency = findViewById(R.id.txtEmergency);
+
+        txtSafetyScore = findViewById(R.id.txtSafetyScore);
+        txtPastAlerts = findViewById(R.id.txtPastAlerts);
+
+        txtSafetyScoreValue = findViewById(R.id.txtSafetyScoreValue);
+        txtPastAlertsValue = findViewById(R.id.txtPastAlertsValue);
+
+        alertCard = findViewById(R.id.alertCard);
+
         bottomNav = findViewById(R.id.bottomNav);
+
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
     }
 
-    // Drawer Header Data
+    // Drawer Header Update
     private void setupDrawerHeader() {
         View headerView = navigationView.getHeaderView(0);
 
@@ -105,7 +124,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
     }
 
-    // Drawer Menu Click Events
+    // -------------------------------------------------------------------------
+    // Drawer Menu Click Listener (ADDED)
+    // -------------------------------------------------------------------------
     private void setupDrawerMenuClick() {
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -130,9 +151,27 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    // Bottom Navigation → Fragment Switching
+
+    private void setupMapClick() {
+        mapImage.setOnClickListener(v ->
+                Toast.makeText(this, "Map clicked", Toast.LENGTH_SHORT).show());
+    }
+
     private void setupBottomNav() {
         bottomNav.setOnItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    private void updateDynamicData() {
+
+        txtTraffic.setText("Moderate");
+        txtWeather.setText("Clear");
+        txtEmergency.setText("Police Nearby");
+
+        txtSafetyScoreValue.setText("82%");
+        txtPastAlertsValue.setText("5");
+
+        alertCard.setOnClickListener(v ->
+                Toast.makeText(this, "Hotspot Warning: Slow Down!", Toast.LENGTH_SHORT).show());
     }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -140,40 +179,20 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, new HomeFragment())
-                    .commit();
-
+            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
             return true;
 
         } else if (id == R.id.nav_reports) {
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, new ReportFragment())
-                    .commit();
-
-            return true;
-
-        } else if (id == R.id.nav_emergency) {
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, new CallFragment())
-                    .addToBackStack(null)
-                    .commit();
+            Toast.makeText(this, "Report Accident", Toast.LENGTH_SHORT).show();
             return true;
 
         } else if (id == R.id.nav_settings) {
-
+            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, new SettingsFragment())
                     .addToBackStack(null)
                     .commit();
-
             return true;
         }
 
