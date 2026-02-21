@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F6E3C7">
+    android:background="#F8F4EF">
 
     <!-- CONTENT -->
     <ScrollView
@@ -84,18 +84,18 @@
                 app:cardElevation="4dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <!-- Emergency Contacts -->
                     <LinearLayout
+                        android:id="@+id/layoutEmergencyContacts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutEmergencyContacts"
-                        android:padding="16dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -113,18 +113,18 @@
                     </LinearLayout>
 
                     <View
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_width="match_parent" />
+                        android:background="#E0E0E0" />
 
                     <!-- SOS -->
                     <LinearLayout
+                        android:id="@+id/layoutSOS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutSOS"
-                        android:padding="16dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -161,18 +161,18 @@
                 app:cardElevation="4dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <!-- Hotspot Alerts -->
                     <LinearLayout
+                        android:id="@+id/layoutHotspotAlerts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutHotspotAlerts"
-                        android:padding="16dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -195,12 +195,12 @@
 
                     <!-- Live Location -->
                     <LinearLayout
+                        android:id="@+id/layoutLiveLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutLiveLocation"
-                        android:padding="16dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -237,17 +237,17 @@
                 app:cardElevation="4dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <!-- Location Permission -->
                     <LinearLayout
+                        android:id="@+id/layoutPermission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutPermission"
-                        android:padding="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -270,11 +270,11 @@
 
                     <!-- Clear Data -->
                     <LinearLayout
+                        android:id="@+id/layoutClearData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/layoutClearData"
-                        android:padding="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="24dp"

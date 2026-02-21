@@ -38,6 +38,6 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }, 3000); // 3 seconds
+        }, 2000); // 2 seconds
     }
 }
