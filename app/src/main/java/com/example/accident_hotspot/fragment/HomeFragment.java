@@ -96,9 +96,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void loadConditions() {
-        txtTraffic.setText("Traffic\nCongested");
-        txtWeather.setText("Weather\nFog");
-        txtEmergency.setText("Emergency\nHospital Nearby");
+        txtTraffic.setText("Traffic");
+        txtWeather.setText("Weather");
+        txtEmergency.setText("Emergency");
     }
 
     private void loadDashboardData() {

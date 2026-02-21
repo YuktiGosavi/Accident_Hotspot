@@ -1,10 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SOSSettingsActivity">
+    android:background="#F6E3C7">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- TOOLBAR -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingTop="20dp"
+        android:background="#232323"
+        app:title="SOS Settings"
+        app:titleTextColor="#ffffff"
+        app:navigationIcon="@drawable/ic_back_arrow" />
+
+    <!-- MAIN AREA -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- SOS SETTINGS CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="16dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- SOS NUMBER TITLE -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SOS Phone Number"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000"/>
+
+                    <!-- PHONE NUMBER INPUT -->
+                    <EditText
+                        android:id="@+id/etSosNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:hint="Enter phone number"
+                        android:inputType="phone"
+                        android:padding="12dp"
+                        android:layout_marginTop="6dp"/>
+
+                    <!-- SOS MESSAGE LABEL -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SOS Message"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000"
+                        android:layout_marginTop="18dp"/>
+
+                    <!-- MESSAGE INPUT -->
+                    <EditText
+                        android:id="@+id/etSosMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:background="@drawable/edit_text_bg"
+                        android:hint="Type your emergency message..."
+                        android:padding="12dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:layout_marginTop="6dp"/>
+
+                    <!-- AUTO SEND TOGGLE -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="20dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Enable Auto-Send SOS"
+                            android:textSize="16sp"
+                            android:textColor="#000"/>
+
+                        <Switch
+                            android:id="@+id/switchAutoSend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- TEST SOS BUTTON -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnTestSos"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Send Test SOS"
+                        android:textColor="#FFF"
+                        android:textStyle="bold"
+                        android:background="@drawable/logout_btn_bg" />
+
+                    <!-- SAVE BUTTON -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSaveSos"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Save Settings"
+                        android:textColor="#FFF"
+                        android:textStyle="bold"
+                        android:background="@drawable/logout_btn_bg" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -144,6 +144,7 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, new HomeFragment())
+                    .addToBackStack(null)
                     .commit();
 
             return true;
@@ -153,6 +154,7 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, new ReportFragment())
+                    .addToBackStack(null)
                     .commit();
 
             return true;
